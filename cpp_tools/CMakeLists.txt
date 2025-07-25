@@ -15,3 +15,8 @@ endif()
 if(prophesee_core_FOUND OR MetavisionSDK_FOUND)
   add_subdirectory(atis3-bridge)
 endif()
+
+if(dv-processing_FOUND)
+  add_subdirectory(dv-bridge)
+endif()
+
