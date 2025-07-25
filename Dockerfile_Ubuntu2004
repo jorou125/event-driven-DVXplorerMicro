@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ARG CODE_DIR=/usr/local/src
 
-#basic environment
+# Basic environment
 RUN apt update && apt install -y \
     ca-certificates \
     build-essential \
@@ -48,22 +48,24 @@ RUN apt install -y \
     metavision-sdk
 
 # dv-processing
-# Install tools needed to add PPAs
-# Add the PPA first
+# Add toolchain PPA and install gcc-13/g++-13
 RUN apt update && \
     apt install -y software-properties-common && \
     add-apt-repository ppa:ubuntu-toolchain-r/test && \
     apt update && \
     apt install -y gcc-13 g++-13
 
-
-# Install dependencies and dv-processing
-RUN apt update &&\
-apt install -y gcc-13 g++-13
-RUN add-apt-repository ppa:inivation-ppa/inivation
-RUN apt-get update
-RUN apt-get install -y git cmake boost-inivation libopencv-dev libeigen3-dev libcaer-dev libfmt-dev liblz4-dev libzstd-dev libssl-dev
-RUN apt-get -y install dv-processing
+# Add inivation PPA and install dv-processing dependencies
+RUN add-apt-repository ppa:inivation-ppa/inivation && \
+    apt-get update && \
+    apt-get install -y \
+        boost-inivation \
+        libcaer-dev \
+        libfmt-dev \
+        liblz4-dev \
+        libzstd-dev \
+        libssl-dev && \
+    apt-get -y install dv-processing
 
 # YCM
 ARG YCM_VERSION=v0.15.2
@@ -85,7 +87,6 @@ RUN cd $CODE_DIR && \
 
 EXPOSE 10000/tcp 10000/udp
 RUN yarp check
-
 
 # event-driven
 ARG ED_VERSION=main
